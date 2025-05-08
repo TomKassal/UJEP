@@ -1,2 +1,4 @@
 # UJEP
-Místo pro nahrávání zápočtových prací a dalších studijních úkolů
+
+Ročník 2024/2025
+MSW - Matematický software
