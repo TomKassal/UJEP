@@ -1,0 +1,1871 @@
+---
+title: "Numerické metody"
+author: "Tomáš Kassal, Martin Kuchař"
+format:
+  html:
+    theme: default
+    toc: true
+    top-location: left
+    toc-depth: 3
+    toc-expand: 1
+    toc-title: "Obsah"
+    number-sections: true
+    number-depth: 3
+editor: visual
+---
+
+# Zavedení základních pojmů
+
+Před rozborem jednotlivých metod je potřeba si zopakovat základní pojmy z kurzu Matematika I.
+
+## Polynom
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebním materiálu:
+
+-   [Polynomy a racionální funkce](https://math.fel.cvut.cz/mt/txtb/4/txc3ba4b.htm).
+::::
+
+Připomeňme si tvar, ve kterém jste byli zvyklí polynom zapisovat. Libovolný polynom můžeme upravit na tvar $$
+a_nx^n + a_{n-1}x^{n-1} + \cdots \ a_1x + a_0,
+$$ kde $n \in \mathbb{N}$ a $a_0, a_1, \cdots, a_n \in \mathbb{R}$.
+
+::: callout-note
+### Definice polynomu
+
+Pod pojmem polynom rozumíme libovolnou funkci ve tvaru $$
+p(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n,
+$$ kde $k \in \mathbb{N}$ a $a_k \in \mathbb{R}$.
+:::
+
+U každého polynomu můžeme určit jeho stupeň, který je vymezen následující definicí.
+
+::: callout-note
+#### Definice stupně polynomu
+
+Nechť $p(x)$ je polynom. Pak definujeme stupeň polynomu $st(p)$ takto: jestliže $p = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n$ a $a_n \neq 0$, pak $$st(p) = n.$$
+:::
+
+## Limita
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebním materiálu:
+
+-   [Definice limity](https://math.fel.cvut.cz/mt/txtb/5/txc3ba5a.htm).
+
+Interaktivní vizualizaci limity včetně její definice naleznete zde:
+
+-   [Limita a spojitost](https://www.geogebra.org/m/us8b5ufy)
+::::
+
+Na následujícím obrázku si vysvětlíme, proč je nástroj limity tak důležitý. Máme funkci $f$ s definičním oborem $D(f) = \mathbb{R} \setminus \{a\}$.
+
+:::::: columns
+::: {.column width="10%"}
+:::
+
+::: {.column width="80%"}
+![Motivace k vytvoření nástroje limity](motivace_limita.jpg)
+:::
+
+::: {.column width="10%"}
+:::
+::::::
+
+V bodě $a$ není funkce $f$ definována. Nicméně na základě naší vizualizace má smysl se ptát, k jakým hodnotám se blíží jednotlivé části funkce $f$?
+
+Funkce se bude zleva i zprava blížit stejné hodnotě. Tímto způsobem tak můžeme odstranit body, v nichž není funkce definována. Navíc je limita nástrojem, jak odhadnout chování v okolí daného bodu (včetně okrajů definičního oboru v $\pm\infty$).
+
+::: callout-note
+#### Definice limity
+
+Uvažujme funkci $f$ definovanou na nějakém prstencovém okolí bodu $a$. Řekneme, že reálné číslo $L$ je **limita** funkce $f$ pro $x$ jdoucí k $a$, nebo že funkce konverguje k tomuto $L$ pro $x$ jdoucí k $a$, jestliže $$
+(\forall\; \epsilon > 0) \;(\exists \;\delta > 0)\;(\forall\; x\in \langle x-\delta;x+\delta \rangle\setminus \{x\});\; f(x) \in \langle L-\epsilon; L+\epsilon\rangle
+$$ Značení je $$\lim{f(x)}=L.$$
+
+Můžeme také psát $f \to L$ pro $x \to a$.
+
+Pokud takové $L$ existuje, řekneme, že $f$ **konverguje** v $a$, jinak řekneme, že $f$ **diverguje** v $a$.
+:::
+
+## Derivace
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebních materiálech:
+
+-   [Matematika pro ekonomy](http://fse.ujep.cz/~moc/ucebnice_matematiky.pdf) na straně 347,
+-   [Diferenciální počet funkcí jedné proměnné](https://homel.vsb.cz/~s1a64/cd/pdf/dp/dp_obr.pdf) na stranách 338-341.
+
+Interaktivní vizualizace derivace:
+
+-   [Derivative - Limit Visualization](https://www.geogebra.org/m/FDgZtVNx)
+::::
+
+#### Geometrický význam derivace {.unnumbered}
+
+:::::: columns
+::: {.column width="10%"}
+:::
+
+::: {.column width="80%"}
+![Derivace v geometrii](motivace_derivace.jpg)
+:::
+
+::: {.column width="10%"}
+:::
+::::::
+
+Geometrická podstata derivace vychází z hledání směrnice tečny $t$ (na obrázku červeně). Co bez pochyb budeme umět najít je směrnice sečny $s$ (na obrázku modře), označme ji $k$. Když se podíváme na obrázek, můžeme vyjádřit směrnici sečny takto $$
+\tan \beta = \frac{f(x)-f(x_0)}{x-x_0}.
+$$ Nyní musíme využít limitní úvahy. Tečnu v bodě $x_0$ z této sečny dostaneme tak, že se bodem $x$ budeme přibližovat k bodu $x$. $$
+\tan \beta = \lim_{x \to x_0} \frac{f(x)-f(x_0)}{x-x_0}
+$$ Nyní si označme šířku mezi body na ose $x$ takto $h = x-x_0$. Nyní upravme naší rovnici podle této substituce. Zároveň, přeznačíme limitu, jelikož chceme aby se šířka $h$ blížila 0. Tím již dostaneme tečnu a bude platit $\alpha = \beta$ $$
+\tan \alpha = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}
+$$ Nyní už jen stačí vzpomenout, že pro směrnici přímky $k$ platí, že $k = \tan \alpha$. Dostáváme se tak k naší rovnici derivace $$
+k = \lim_{h\to 0} \frac{f(x_0 + h) - f(x_0)}{h}.
+$$
+
+::: callout-note
+#### Definice derivace
+
+Mějme dánu funkci $f(x)$. Existuje-li limita $$
+\lim_{h\to0} \frac{f(a+h)-f(a)}{h},
+$$ potom její hodnotu nazýváme **derivací** funkce $f(x)$ v bodě $a$ a značíme ji symbolem $f'(a)$.
+:::
+
+## Integrál
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně obrázků naleznete v učebnici:
+
+-   [Matematika pro ekonomy](http://fse.ujep.cz/~moc/ucebnice_matematiky.pdf) na stranách 439 - 445.
+
+Interaktivní vizualizace určitého integrálu:
+
+-   [Definite Integral Calculator](https://www.geogebra.org/m/tge9bpap)
+-   [Approximating a Definite Integral from Graph](https://www.geogebra.org/m/myqgeegt)
+::::
+
+Podstatou neurčitého itegrálu je nalezení primitivní funkce $F(x)$ k funkci $f(x)$, neboli funkce, z níž po jejím zderivování dostaneme původní funkci. $$
+\int f(x) \, \mathrm{d}x = F(x)
+$$ Musí pak platit $$
+F'(x) = f(x).
+$$ Nicméně v numerických metodách se snažíme o vyčíslení integrálu, tedy o výpočet obsahu mezi funkcí $f(x)$ a osou $x$. To znamená, že se budeme snažit o výpočet určitého integrálu na intervalu $\langle a; b\rangle$ $$
+\int_{a}^{b} f(x) \, \mathrm{d}x.
+$$ K výpočtu určitého integrálu se používá následující věta.
+
+::: callout-note
+#### Newton-Leibnizova věta
+
+Nechť $a<b$, nechť $\exists \int_{a}^{b} f(x)$, nechť $F(x)$ je funkce, která má tyto vlastnosti:
+
+1.  je spojitá na intervalu $\langle a;b \rangle$,
+2.  $\forall x \in \langle a;b \rangle; \; F'(x) = f(x)$.
+
+Pak platí $$
+\int_{a}^{b} f(x) = F(b) - F(a).
+$$
+:::
+
+# Řešení nelineárních rovnic
+
+V této kapitole se snažíme o nalezení kořenů nelineárních rovnic, tj. hledáme bod, v němž platí $f(x) = 0$, kde $f$ je funkce.
+
+:::::: columns
+::: {.column width="25%"}
+:::
+
+::: {.column width="50%"}
+![Hledané body](motivace.jpg){fig-cap="Obrázek 1"}
+:::
+
+::: {.column width="25%"}
+:::
+::::::
+
+## Volba funkce vhodné pro aplikování metod
+
+Nejprve si zvolíme funkci, na níž budeme postupně představovat všechny metody řešení nelineárních rovnic. Zvolme funkci $$
+f(x) = x^3 - x - 2.
+$$
+
+## Metoda půlení intervalu (bisekce)
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebnicích:
+
+-   [Numerika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/Numerika.pdf) na stranách 36-38,
+-   [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/FINALNI_VERZE_CD.pdf) na stranách 25-26.
+
+Interaktivní vizualizace metody:
+
+-   [Numerické metody - půlení intervalu](https://www.geogebra.org/m/krEg2ew5)
+::::
+
+Metoda půlení intervalu je nejjednodušší z metod řešení nelineárních rovnic. Mějme spojitou funkci $f$ a interval $\langle a, b \rangle$, pro který platí, že $f(a) \cdot f(b) < 0$. Z následující věty potom plyne existence alespoň jednoho kořene na tomto intervalu.
+
+::: callout-note
+### Věta
+
+Je-li funkce $f$ spojitá na intervalu $\langle a, b \rangle$ a platí-li $f(a)f(b) < 0$, pak v intervalu $\langle a, b \rangle$ leží alespoň jeden kořen rovnice $f(x) = 0$.
+:::
+
+Myšlenka této věty je jednoduchá - v krajních bodech intervalu jsou odlišná znaménka. Z předpokladu spojitosti pak plyne pochopitelný fakt, že funkce $f$ musí na tomto intervalu protnout osu $x$.
+
+Samotný výpočet kořene se nyní odvíjí od zužování intervalu, kdy vezmeme bod v polovině intervalu $c = \frac{a+b}{2}$ a zjistíme zda není kořenem rovnice. Pokud tomu tak není, zjistíme, který z dvou vzniklých intervalů splňuje podmínku $f(a) \cdot f(b) < 0$ a s tímto novým intervalem pak pokračujeme znovu.
+
+Tento postup následně opakujeme, dokud nedosáhneme požadované přesnosti. Kořenem dané rovnice je střed intervalu a požadovanou přesností je polovina momentálního intervalu $\langle a, b \rangle$.
+
+:::::: columns
+::: {.column width="45%"}
+![Původní interval $\langle a,b \rangle$](bisection1.jpg){fig-cap="Obrázek 2"}
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+![Vytvoření nového intervalu $\langle a,c \rangle$](bisection2.jpg){fig-cap="Obrázek 3"}
+:::
+::::::
+
+### Metoda půlení intervalu v jazyce R {.unnumbered}
+
+```{r}
+# Funkce: bisection(f, a, b, tol, maxIter)
+#   - f:        spojitá funkce jedné proměnné (function(x) ...)
+#   - a, b:     krajní body intervalu, kde f(a) * f(b) < 0
+#   - tol:      tolerance chyby (např. 1e-6)
+#   - maxIter:  maximální počet iterací
+############################################################
+
+bisection <- function(f, a, b, tol = 1e-6, maxIter = 100) {
+  # Výpočet hodnot na krajích intervalu
+  fa <- f(a)
+  fb <- f(b)
+
+  # Podmínka nutná pro zaručení kořene (f(a)*f(b) < 0)
+  if (fa * fb > 0) {
+    cat("Chyba: Na intervalu není změna znaménka — nelze zaručit kořen.\n")
+    return(NULL)
+  }
+
+  # Proměnná pro střed intervalu
+  c <- NA
+
+  # Iterační smyčka
+  for (i in 1:maxIter) {
+    c <- (a + b) / 2          # střed intervalu
+    fc <- f(c)                # hodnota funkce ve středu
+
+    # Kontrola přesnosti — splněno?
+    if (abs(fc) < tol || (b - a) / 2 < tol) {
+      cat(sprintf("Konvergence dosažena po %d iteracích.\n", i))
+      return(c)
+    }
+
+    # Výběr nového intervalu podle znaménka
+    if (fa * fc < 0) {
+      b <- c
+      fb <- fc
+    } else {
+      a <- c
+      fa <- fc
+    }
+  }
+
+  # Pokud metoda neskonverguje do maxIter
+  cat("Varování: Metoda nedosáhla požadované přesnosti.\n")
+  return(NULL)
+}
+
+
+# PŘÍKLAD POUŽITÍ
+
+# Definice testovací funkce
+f <- function(x) x^3 - x - 2   # známe kořen ≈ 1.52138
+
+# Spuštění bisekce
+root <- bisection(f, a = 1, b = 2, tol = 1e-8, maxIter = 100)
+
+if (!is.null(root)) {
+  cat(sprintf("Nalezený kořen: x = %.12f\n", root))
+  cat(sprintf("Kontrola: f(x) = %.3e\n", f(root)))
+}
+```
+
+## Metoda regula falsi
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebnicích:
+
+-   [Numerika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/Numerika.pdf) na stranách 39-40,
+-   [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/FINALNI_VERZE_CD.pdf) na stranách 26-28.
+
+Interaktivní vizualizace metody (na vámi zadaném příkladu):
+
+-   [Regula Falsi](https://www.geogebra.org/m/eesrxayk)
+::::
+
+Princip metody regula falsi se do značné míry podobá bisekci. Stále předpokládám spojitou funkci $f$ a interval $\langle a, b \rangle$, pro nějž platí $f(a) \cdot f(b) < 0$.
+
+Rozdělení intervalu nyní nespočívá v půlení intervalu, nýbrž ve spojení funkčních hodnot $f(a)$ a $f(b)$. Nový bod, který rozdělí interval, vznikne jako průsečík těchto bodů a osy $x$.
+
+:::::: columns
+::: {.column width="45%"}
+![Původní interval $\langle a,b \rangle$](regula_falsi1.jpg){fig-cap="Obrázek 4"}
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+![Vytvoření nového intervalu $\langle c,b \rangle$](regula_falsi2.jpg){fig-cap="Obrázek 5"}
+:::
+::::::
+
+### Metoda regula falsi v jazyce R {.unnumbered}
+
+```{r}
+# Vstupy:
+#   f         ... funkce jedné proměnné (function(x) ...)
+#   a         ... levý kraj intervalu
+#   b         ... pravý kraj intervalu
+#   tol       ... tolerance přesnosti (kdy končí výpočet)
+#   max_iter  ... maximální počet iterací
+
+regula_falsi <- function(f, a, b, tol = 1e-6, max_iter = 100) {
+
+  fa <- f(a)
+  fb <- f(b)
+
+  for (i in 1:max_iter) {
+
+    # Výpočet průsečíku sekanty s osou x
+    c <- (a * fb - b * fa) / (fb - fa)
+    fc <- f(c)
+
+    cat(sprintf("Iterace %02d: a = %.6f, b = %.6f, c = %.12f, f(c) = %.6e\n",
+                i, a, b, c, fc))
+
+    # Zastavení: pokud f(c) je dostatečně blízko nule
+    if (abs(fc) < tol) {
+      cat(sprintf("\nKořen nalezen po %d iteracích: x = %.12f\n", i, c))
+      cat(sprintf("Kontrola: f(x) = %.3e\n", f(c)))
+      return(c)
+    }
+
+    # Posun intervalu — vybíráme tu polovinu, kde je změna znaménka
+    if (fa * fc < 0) {
+      b  <- c
+      fb <- fc
+    } else {
+      a  <- c
+      fa <- fc
+    }
+  }
+
+  # Pokud metoda nekonverguje
+  cat(sprintf("\n Nedosaženo tolerance po %d iteracích. Poslední aproximace: %.12f\n",
+              max_iter, c))
+  return(c)
+}
+
+
+# PŘÍKLAD POUŽITÍ
+f <- function(x) x^3 - x - 2  # známý testovací příklad (kořen ~1.521)
+regula_falsi(f, 1, 2, tol = 1e-8, max_iter = 100)
+```
+
+## Newtonova metoda tečen
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně příkladů naleznete v učebnicích:
+
+-   [Numerika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/Numerika.pdf) na stranách 41-44,
+-   [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/FINALNI_VERZE_CD.pdf) na stranách 29-33.
+
+Interaktivní vizualizace metody:
+
+-   [Metoda tečen (Newtonova metoda)](https://www.geogebra.org/m/zn7sj2yd)
+::::
+
+Metoda tečen je metodou velice účinnou, nicméně ne vždy konverguje.
+
+Tato metoda je dokonce i snadno odvoditelná z následujícího obrázku (pochopitelně za předpokladu, že bude konvergovat).
+
+:::::: columns
+::: {.column width="40%"}
+![Ilustrace Newtonovy metody](newton.jpg){fig-cap="Obrázek 6"}
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="50%"}
+![Trojúhelník k odvození](newton_triangle.jpg){fig-cap="Obrázek 7"}
+:::
+::::::
+
+Z grafu funkce s tečnou můžeme převzít trojúhelník napravo a z něho následně takto odvodit metodu tečen: $$tg \; \alpha = \frac{y_0}{x_0-x_1} = \frac{f(x_0)}{x_0-x_1}$$ Zdánlivým problémem je, že neznáme hodnotu $tg \; \alpha$, vzpomeneme-li však na základy diferenciálního počtu, dojdeme k rovnosti $tg \; \alpha = f'(x)$. To můžeme dosadit zpět do naší rovnice a obdržíme následující rovnost: $$f'(x_0) = \frac{f(x_0)}{x_0-x_1}$$ Toto můžeme několika jednoduchými úpravami dostat do tvaru, kde bude vyjádřeno $x_1$. $$x_0-x_1 = \frac{f(x_0)}{f'(x_0)}$$ $$x_1 = x_0 -\frac{f(x_0)}{f'(x_0)}$$
+
+Druhou variantou je odvození tohoto vzorce z Taylorova polynomu. Mějme tedy toto vyjádření funkce pomocí Taylorova polynomu $$f(x) = f(x_0) + f'(x_0)(x-x_0)$$ Nyní je potřeba dosadit takto $x \coloneqq x_1$, čímž dostaneme tvar $$f(x_1) = f(x_0) + f'(x_0)(x_1-x_0)$$ A protože se bod v $x_1$ nachází na ose $x$, pak musí platit $f(x_1) = 0$, tím dostaneme rovnost, z níž vyjádříme $x_1$. $$0 = f(x_0) + f'(x_0)(x_1-x_0)$$ $$-\frac{f(x_0)}{f'(x_0)} = x_1-x_0$$ $$x_1 = x_0 + \frac{f(x_0)}{f'(x_0)}$$
+
+### Newtonova metoda tečen v jazyce R {.unnumbered}
+
+```{r}
+# Vstupy:
+#   f   ... funkce, jejíž kořen hledáme
+#   fd  ... derivace funkce f
+#   x0  ... počáteční odhad (bod, kde "začneme" tečnu)
+#   tol ... tolerance přesnosti (typicky 1e-8)
+#   max_iter ... maximální počet iterací
+
+newton_tecen <- function(f, fd, x0, tol = 1e-8, max_iter = 100) {
+  
+  cat("Iterace |        x        |       f(x)       \n")
+  cat("---------------------------------------------\n")
+  
+  for (i in 1:max_iter) {
+    fx  <- f(x0)
+    fdx <- fd(x0)
+    
+    # Newtonův krok — průsečík tečny s osou x
+    x1 <- x0 - fx / fdx
+    
+    cat(sprintf("%5d   | %14.10f | %14.6e\n", i, x1, fx))
+    
+    # kontrola přesnosti
+    if (abs(x1 - x0) < tol) {
+      cat("\n Konvergence dosažena po", i, "iteracích.\n")
+      cat(sprintf("Kořen: x = %.12f\n", x1))
+      cat(sprintf("Kontrola: f(x) = %.3e\n", f(x1)))
+      return(x1)
+    }
+    
+    # posun na další iteraci
+    x0 <- x1
+  }
+  
+  cat("\nNedosaženo tolerance po", max_iter, "iteracích.\n")
+  cat(sprintf("Poslední aproximace: x = %.12f\n", x1))
+  return(x1)
+}
+# PŘÍKLAD POUŽITÍ
+
+# Rovnice: x^3 - x - 2 = 0
+# Derivace: 3x^2 - 1
+# Skutečný kořen ≈ 1.52138
+
+f  <- function(x) x^3 - x - 2
+fd <- function(x) 3*x^2 - 1
+
+# Spustíme metodu s počátečním odhadem x0 = 2
+newton_tecen(f, fd, x0 = 2, tol = 1e-8, max_iter = 20)
+```
+
+## Steffensenova metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další vysvětlení naleznete v učebnici:
+
+-   [Numerické metody](https://math.fme.vutbr.cz/download.aspx?id_file=246843468) na stranách 85-86.
+::::
+
+Steffensenova metoda je iterativní metodou hledání kořene. Je v podstatě úpravou předchozí Newtonovy metody tečen, respektive úpravou jeho předpisu. $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$ Tato metoda však odstraňuje derivaci ve jmenovateli a nahrazuje ji funkcí $g$, která je v podstatě předpisem derivace, ovšem bez limitní úvahy. $$x_{n+1} = x_n - \frac{f(x_n)}{g(x_n)}$$ $$g(x) = \frac{f(x+h)-f(x)}{h}$$ Uvažujeme tak, že pro toto vyjádření platí, že v určitém bodě bude přibližně rovno derivaci funkce $f$. $$f'(x_k) \approx g(x_k) = d_k = \frac{f(x_k+h_k)-f(x_k)}{h_k}$$ Jako hodnotu $h_k$ používáme odhad derivace tak, že $h_k = f(x_k)$.
+
+### Steffensenova metoda v jazyce R {.unnumbered}
+
+```{r}
+# Vstupy:
+#   f         ... funkce jedné proměnné (function(x) ...)
+#   x0        ... počáteční odhad kořene
+#   tol       ... tolerance přesnosti v x (|x_{n+1} - x_n|)
+#   max_iter  ... maximální počet iterací
+
+steffensen <- function(f, x0, tol = 1e-8, max_iter = 100, verbose = TRUE) {
+
+  if (verbose) {
+    cat("Iterace |        x        |        f(x)       \n")
+    cat("------------------------------------------------\n")
+  }
+
+  for (i in 1:max_iter) {
+    fx <- f(x0)
+    h  <- fx                           # odhad kroku (h = f(x))
+    gx <- (f(x0 + h) - fx) / h         # g(x) ≈ kvaziderivace
+
+    x1 <- x0 - fx / gx                 # Steffensenův krok
+
+    if (verbose) {
+      cat(sprintf("%5d   | %14.10f | %14.6e\n", i, x1, fx))
+    }
+
+    # Kritérium zastavení: změna v x je menší než tolerance
+    if (abs(x1 - x0) < tol) {
+      if (verbose) {
+        cat("\n Konvergence dosažena po", i, "iteracích.\n")
+        cat(sprintf("Kořen: x = %.12f\n", x1))
+        cat(sprintf("Kontrola: f(x) = %.3e\n", f(x1)))
+      }
+      return(x1)
+    }
+
+    x0 <- x1
+  }
+
+  if (verbose) {
+    cat("\n  Nedosaženo tolerance po", max_iter, "iteracích.\n")
+    cat(sprintf("Poslední aproximace: x = %.12f\n", x1))
+  }
+  return(x1)
+}
+
+
+############################################################
+# PŘÍKLADY POUŽITÍ
+############################################################
+
+# --- Příklad : Polynom x^3 - x - 2 = 0 -------------------
+# Kořen by měl být přibližně 1.52138
+f1 <- function(x) x^3 - x - 2
+cat("\n--- Příklad 1: x^3 - x - 2 ---\n")
+steffensen(f1, x0 = 2, tol = 1e-10, max_iter = 50, verbose = TRUE)
+```
+
+## Halleyova metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace včetně důkazu této metody naleznete na webu:
+
+-   [Halley's method](https://proofwiki.org/wiki/Halley%27s_Method).
+::::
+
+Na rozdíl od Steffensenovy metody, která derivace eliminovala, počítá Halleyova metoda i s druhou derivací. Vychází ze vzorce $$x_{n+1} = x_n - \frac{f(x_n)f'(x_n)}{|f'(x_n)|^2-\frac{1}{2}f(x_n)f''(x_n)}$$
+
+### Halleyova metoda v jazyce R {.unnumbered}
+
+```{r}
+# Vstupy:
+#   f        ... funkce f(x)
+#   fd       ... první derivace f'(x)
+#   fdd      ... druhá derivace f''(x)
+#   x0       ... počáteční odhad
+#   tol      ... tolerance pro |x_{n+1} - x_n|
+#   max_iter ... maximální počet iterací
+#   verbose  ... TRUE = tisk průběhu, FALSE = ticho
+
+halley <- function(f, fd, fdd, x0, tol = 1e-8, max_iter = 100, verbose = TRUE) {
+  if (verbose) {
+    cat("Iterace |        x        |        f(x)       \n")
+    cat("------------------------------------------------\n")
+  }
+
+  for (i in 1:max_iter) {
+    y   <- f(x0)          # f(x_n)
+    yd  <- fd(x0)         # f'(x_n)
+    ydd <- fdd(x0)        # f''(x_n)
+
+    denom <- (yd * yd) - 0.5 * y * ydd
+    x1 <- x0 - (y * yd) / denom
+
+    if (verbose) cat(sprintf("%5d   | %14.10f | %14.6e\n", i, x1, y))
+
+    # Kritérium zastavení: dostatečná přesnost v x
+    if (abs(x1 - x0) < tol) {
+      if (verbose) {
+        cat("\n Konvergence dosažena po", i, "iteracích.\n")
+        cat(sprintf("Kořen: x = %.12f\n", x1))
+        cat(sprintf("Kontrola: f(x) = %.3e\n", f(x1)))
+      }
+      return(x1)
+    }
+    x0 <- x1
+  }
+
+  if (verbose) {
+    cat("\n  Nedosaženo tolerance po", max_iter, "iteracích.\n")
+    cat(sprintf("Poslední aproximace: x = %.12f\n", x1))
+  }
+  return(x1)
+}
+
+# PŘÍKLADY POUŽITÍ
+
+# === PŘÍKLAD 1: x^3 - x - 2 = 0 ==========================
+# Kořen ≈ 1.521379707
+f   <- function(x) x^3 - x - 2
+fd  <- function(x) 3*x^2 - 1
+fdd <- function(x) 6*x
+
+cat("\n--- Příklad 1: x^3 - x - 2 ---\n")
+halley(f, fd, fdd, x0 = 2, tol = 1e-12, max_iter = 20, verbose = TRUE)
+```
+
+## Fixed-point iteration
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+Další informace můžete najít v učebnicích:
+
+-   [Numerika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/Numerika.pdf) na straně 44, 45,
+-   [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/FINALNI_VERZE_CD.pdf) na stranách 34-39.
+
+Interaktivní vizualizace metody:
+
+-   [Fixed point iteration](https://www.geogebra.org/m/qUbg7Z6W)
+::::
+
+Fixed-point iteration (nebo také metoda prosté iterace) vychází z jednoduché myšlenky. Obecnou rovnici, kterou řešíme, tedy $$f(x) = 0,$$ upravíme do tvaru $$x = g(x).$$ Funkci $g$ tu nazýváme iterační funkcí. Nyní nebudeme hledat kořen rovnice, nýbrž pevný bod funkce $g.$
+
+::: callout-note
+### Definice pevného bodu
+
+Mějme množinu $X.$ Prvek $x \in X$ se nazývá pevný bod zobrazení $F: X \to X$, jestliže platí $F(x) = x.$
+:::
+
+Zvolíme počáteční aproximaci $x_0$ a další aproximace pevného bodu bude $$x_{k+1} = g(x_k).$$
+
+Ve výše uvedeném zdroji naleznete i podmínku konvergence této metody.
+
+Naší rovnici $$0 = f(x) = x^3 - x - 2$$ si v tuto chvíli musíme upravit do tvaru, který popíše iterační funkci. $$
+x^3 - x- 2=0 \implies x= \sqrt[3]{x+2}
+$$ V tuto chvíli je naší iterační funkcí $$g(x) = \sqrt[3]{x+2}.$$
+
+### Fixed-point iteration v jazyce R {.unnumbered}
+
+```{r}
+# Fixed point iteration
+# Vstupy:
+#   f        ... funkce pro iteraci 
+#   x0       ... počáteční odhad
+#   max_iter ... maximální počet iterací
+#   eps      ... tolerance přesnosti
+#   verbose  ... TRUE = tisk průběhu, FALSE = ticho
+#
+
+FixedPointIteration <- function(f, x0, max_iter = 1000, eps = 1e-8, verbose = TRUE) {
+  
+  if (verbose) {
+    cat("Iterace |        x        |        f(x)       \n")
+    cat("------------------------------------------------\n")
+  }
+  
+  for (i in 1:max_iter) {
+    x <- f(x0)
+    
+    if (verbose)
+      cat(sprintf("%5d   | %14.10f | %14.6e\n", i, x, f(x0)))
+    
+    # Pokud je změna menší než tolerance → konvergence
+    if (abs(x - x0) < eps) {
+      if (verbose) {
+        cat("\n Konvergence dosažena po", i, "iteracích.\n")
+        cat(sprintf("Pevný bod: x = %.12f\n", x))
+        cat(sprintf("Kontrola: f(x) = %.12f\n", f(x)))
+      }
+      return(list(x = x, iter = i))
+    }
+    
+    x0 <- x
+  }
+  
+  if (verbose) {
+    cat("\n  Nedosaženo tolerance po", max_iter, "iteracích.\n")
+    cat(sprintf("Poslední aproximace: x = %.12f\n", x))
+  }
+  return(list(x = x, iter = max_iter))
+}
+
+# Příklad:
+# f(x) = x^3 - x - 2
+# Přepis do tvaru pevného bodu: x = (x + 2)^(1/3)
+
+f2 <- function(x) (x + 2)^(1/3)
+
+cat("\n--- Příklad 2: f(x) = x^3 - x - 2 ---\n")
+FixedPointIteration(f2, x0 = 1.5, eps = 1e-12, max_iter = 100)
+```
+
+## Newtonova-Hornerova metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujícím materiálu naleznete další podrobnosti o této metodě:
+
+-   [Hornerovo schéma a jeho aplikace v Newtonově metodě](https://physics.ujep.cz/~jskvor/NME/Okruhy/NewtonHorner.pdf) (včetně odvození).
+::::
+
+K aplikování Newtonovy-Hornerovy metody je nutné znát princip Hornerova schématu. To se týká polynomu a dává nám o něm zajímavé informace.
+
+### Hornerovo schéma {.unnumbered}
+
+Mějme polynom $$p(x) = a_0 + a_1x + a_2x^2 + \ldots + a_nx^n,$$ kde $a_0, a_1, \ldots$ jsou koeficienty. Celá myšlenka souvisí s možným vyjádřením polynomu ve tvaru $$p(x) = a_0 + x(a_1 + x(a_2 + x(a_3 + \ldots+x(a_{n-1}+a_nx)\ldots)))$$
+
+Ukažme si Hornerovo schéma na polynomu $p(x) = 11x^3-4x^2+3x + 2$ v bodě 3. Do vrchní části tabulky si zapíšeme koeficienty v sestupném pořadí mocnin $x$.
+
+|     | 11  | -4  | 3   | 2   |
+|-----|-----|-----|-----|-----|
+| 3   |     | 33  | 87  | 270 |
+|     | 11  | 29  | 90  | 272 |
+
+Na tomto příkladu je vidět, že čísla v prvním a druhém řádku ve stejném sloupci se sčítají, zatímco, abychom dostali hodnotu ve druhém řádku, musíme vynásobit hodnotu z předchozího sloupce a následujícího řádku hledaným bodem, v našem případem číslem 3.
+
+Číslo v posledním sloupci a řádku, v našem případě 272, je hodnota polynomu v bodě, tedy $p(3) = 272.$ Čísla na třetím řádku jsou zároveň koeficienty výsledného polynomu po dělení původního polynomu polynomem tvaru $x-k$, kde $k$ je vybraný bod. Zde by to bylo tedy $$(11x^3-4x^2+3x + 2):(x-3)=11x^2+29x+90 + \frac{272}{x-3}$$
+
+Tabulku lze rozšířit a zjišťovat z ní další informace.
+
+|     | 11  | -4  | 3   | 2   |
+|-----|-----|-----|-----|-----|
+| 3   |     | 33  | 87  | 270 |
+|     | 11  | 29  | 90  | 272 |
+| 3   |     | 33  | 186 |     |
+|     | 11  | 62  | 276 |     |
+| 3   |     | 33  |     |     |
+|     | 11  | 95  |     |     |
+| 3   |     |     |     |     |
+|     | 11  |     |     |     |
+
+Čísla na vedlejší diagonále jsou potom hodnoty jednotlivých derivací, a to následovně: $$p(3) = 272$$ $$p'(3) = 276$$ $$\frac{1}{2}p''(3) = 95$$ $$\frac{1}{6}p'''(3) = 11$$
+
+Obecně by tedy šlo zapsat, že na diagonále leží postupně hodnoty derivací ve tvaru $\frac{1}{k!}p^{(k)}(x)$, kde $k$ je stupeň derivace příslušného polynomu.
+
+### Newtonova-Hornerova metoda v jazyce R {.unnumbered}
+
+```{r}
+# Vstupy:
+# Koeficienty polynomu od konstantního členu po nejvyšší mocninu:
+#   Např. x^2 - 2  →  a = c(-2, 0, 1)
+#   Např. x^3 - x - 2 → a = c(-2, -1, 0, 1)
+#   Např. x^3 - 6x^2 + 11x - 6 → a = c(-6, 11, -6, 1)
+
+# a <- c(-2, 0, 1)        koeficienty (polynom x^2 - 2)
+# x0 <- 2                 počáteční odhad kořene
+# tol <- 1e-7             tolerance konvergence (přesnost)
+# max_iter <- 1000        maximální počet iterací
+
+# FUNKCE HORNER
+Horner <- function(a, x){
+  # a ... numeric vektor koeficientů (a0, a1, ..., a_{n-1})
+  # x ... bod, ve kterém vyhodnocujeme
+  # Výstup: c(y, yd), kde y = f(x), yd = f'(x)
+  n <- length(a)
+  y <- a[n]           # začínáme od nejvyššího členu
+  if(n > 1){
+    yd <- y
+    if(n > 2){
+      for(i in (n-1):2){
+        y  <- y*x + a[i]   # klasický Horner pro f(x)
+        yd <- yd*x + y     # Horner pro f'(x)
+      }
+    }
+    y <- y*x + a[1]
+    return(c(y, yd))
+  }
+  return(c(y, 0))     # pokud je polynom konstantní
+}
+
+# FUNKCE NEWTON–HORNER
+NewtonHorner <- function(a, x0, tol = 1e-7, max_iter = 1000){
+  # a   ... koeficienty polynomu
+  # x0  ... počáteční odhad
+  # tol ... tolerance pro konvergenci
+  # max_iter ... maximální počet iterací
+  x <- x0
+  for (i in 1:max_iter){
+    res <- Horner(a, x)       # res[1]=f(x), res[2]=f'(x)
+    dx  <- res[1] / res[2]    # Newtonův krok
+    if (abs(dx) < tol){
+      cat("Konvergence dosažena po", i, "iteracích.\n")
+      return(x)
+    }
+    x <- x - dx
+  }
+  cat("Varování: nedošlo ke konvergenci po", max_iter, "iteracích.\n")
+  return(x)
+}
+
+# TESTY
+cat("\n=== TEST 2: f(x) = x^3 - x - 2 ===\n")
+a2 <- c(-2, -1, 0, 1) # x^3 - x - 2
+root2 <- NewtonHorner(a2, x0 = 1)
+cat("Odhadnutý kořen ≈", root2, "\n")   # očekáváme cca 1.521
+```
+
+# Řešení soustav lineárních rovnic
+
+Soustavu lineárních rovnic můžeme zapisovat dvěma způsoby. Tím prvním je klasický zápis soustavy pomocí výčtu jednotlivých rovnic, a to takto $$
+\begin{array}{c}
+a_{11}x_1 + a_{12}x_2 + \dots + a_{1n}x_n & = & b_1 \\
+a_{21}x_1 + a_{22}x_2 + \dots + a_{2n}x_n & = & b_2 \\
+\vdots & & \vdots \\
+a_{n1}x_1 + a_{n2}x_2 + \dots + a_{nn}x_n & = & b_n.
+\end{array}
+$$ Pochopitelně u uvedeného příkladu by za účelem obecnosti měl být rozdílný rozměr, např. $m$ řádků a $n$ sloupců. My však budeme numericky řešit soustavu lineárních rovnic o $n$ rovnicích a $n$ neznámých. Druhým způsobem je poté forma maticového zápisu soustavy lineárních rovnic $$
+A\vec{x} = \vec{b},
+$$ kde $A$ je matice soustavy, $\vec{x}$ je vektor neznámých a $\vec{b}$ je vektorem pravých stran. Výše zmíněná shoda obou rozměrů se tu projeví tak, že bude matice $A$ maticí čtvercovou. Pro další práci s touto formou zápisu soustavy rovnic je vhodné připomenout i pojem rozšířená matice soustavy, značme ji $A^*$. $$
+A^* = 
+\begin{pmatrix}
+\begin{array}{cccc|c}
+a_{11} & a_{12} & \cdots & a_{1n} & b_1 \\
+a_{21} & a_{22} & \cdots & a_{2n} &b_2 \\
+\vdots & \vdots & \ddots & \vdots &\vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn} &b_n
+\end{array}
+\end{pmatrix}
+$$ Z následující věty plyne fakt, že pokud známe matici soustavu a rozšířenou matici soustavy, řešení bude mít právě tehdy, když mají obě matice stejnou hodnost, tj. stejný počet lineárně nezávislých řádků.
+
+::: callout-note
+### Frobeniova věta
+
+Nechť $A \in T^{m,n}$ a $\vec{b} \in T^m$. Potom pro soustavu lineárních rovnic $A \cdot \vec{x} = \vec{b}$ platí, že soustava má řešení právě tehdy když $h(A) = h(A^*)$.
+:::
+
+Pokud se hodnosti liší, pak soustava nemá řešení. Ovšem pokud platí, že $h(A) = h(A^*)$, mohou nastat dvě situace:
+
+1.  $h(A) = n$, pak má soustava právě jedno řešení
+
+2.  $h(A) < n$, pak má soustava nekonečně mnoho řešení.
+
+Důvodem, proč nemůže nastat situace $h(A) > n$, je počet řádků matice $A$, a to je $n$.
+
+Nyní si musíme připomenout ekvivaletní úpravy matice:
+
+1.  záměna dvou řádků
+
+2.  vynásobení řádku nenulovým číslem
+
+3.  připočtení jednoho řádku k jinému
+
+
+## Volba vhodné soustavy k řešení
+Zvolme si soustavu lineárních rovnic, na níž budeme představovat jednotlivé metody jejího řešení. A zvolme ji následovně
+
+$$
+\begin{aligned}
+10x_1 - 2x_2 + 3x_3 - x_4 + 2x_5 &= 27 \\
+-3x_1 + 9x_2 + x_3 + 7x_4 - 2x_5 &= -61.5 \\
+2x_1 - x_2 - 7x_3 + 3x_4 + 8x_5 &= -21.25 \\
+x_1 + 7x_2 - 5x_3 + 10x_4 + x_5 &= -41.1 \\
+-2x_1 + 3x_2 + 8x_3 - 4x_4 + 15x_5 &= 100.2
+\end{aligned}
+$$
+
+## Gaussova eliminační metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujícím materiálu naleznete vysvětlení metody prezentované na příkladu:
+
+-   [Gaussova eliminační metoda](https://frodo.fp.tul.cz/~cvrcek/mv2_files/GE.pdf).
+
+Video s postupem Gaussovy eliminační metody:
+
+-   [Gaussova eliminační metoda](https://www.youtube.com/watch?v=buhdFjMy7PU)
+::::
+
+Podstatou Gaussovy eliminační metody je úprava rozšířené matice soustavy $A^*$ do horního trojúhelníkového tvaru, tedy tvaru, kdy má matice pod hlavní diagonálou nuly. $$
+A^*=
+\begin{pmatrix}
+\begin{array}{ccccc|c}
+a_{11} & a_{12} & \cdots & a_{1(n-1)}& a_{1n} & b_1 \\
+0 & a_{22} & \cdots & a_{2(n-1)} & a_{2n} &b_2 \\
+\vdots & \vdots & \ddots & \vdots &\vdots&\vdots \\
+0 & 0 & \cdots & a_{(n-1)(n-1)}& a_{(n-1)n} &b_n \\
+0 & 0 & \cdots & 0 & a_{nn} &b_n
+\end{array}
+\end{pmatrix}
+$$ Tato část výpočtu se nazývá "přímý chod" a její složitost je řádově $n^3$. Musíme totiž procházet celé řádky, sloupce a diagonálu, na níž jsou řídící prvky (pivot).
+
+Vzhledem k tomu, že počítač se neumí rozhodovat jako my podle toho, jaká čísla se nám líbí. Proto musíme vždy vynulovat prvky pod řídícím prvkem tak, že odečteme od prvku pod pivotem příslušný násobek řídícího prvku, například pro $$0 = a_{21} - \frac{a_{21}}{a_{11}}.$$
+
+Všimněme si, že pokud bude řídící prvek nula, program by nám spadl, jelikož bychom dělili nulou. Proto existuje i verze tzv. Gaussova eliminační metoda s pivotací, kde toto ošetříme.
+
+Ve druhé části, zvané "zpětný chod", spočteme z matice v horním trojúhelníkovém tvaru jednotlivá řešení. Postupujeme přitom od posledního řádku, který symbolizuje rovnici $$a_{nn}x_n = b_n$$. Vyjádříme tedy $x_n$ takto $$x_n = \frac{b_n}{a_{nn}}.$$ Následně se posuneme o řádek výše $$a_{(n-1)(n-1)}x_{n-1} + a_{(n-1)n}x_{n} = b_{n-1}.$$ Toto upravíme do tvaru $$x_{n-1} = \frac{b_{n-1}-a_{n-1}x_n}{a_{(n-1)(n-1)}}$$ a tak bychom pokračovali až k prvnímu řádku.
+
+### Gaussova eliminační metoda v jazyce R {.unnumbered}
+
+```{r}
+# ================== VSTUPY ==================
+A <- matrix(
+  c( 10, -2,  3, -1,  2,
+     -3,  9,  1,  7, -2,
+      2, -1, -7,  3,  8,
+      1,  7, -5, 10,  1,
+     -2,  3,  8, -4, 15),
+  nrow = 5, byrow = TRUE
+)
+b <- c(27, -61.5, -21.25, -41.1, 100.2)
+N <- length(b)
+
+# 1) Gaussova eliminace (bez pivotace)
+GaussElimination <- function(A, b) {
+  N <- length(b)
+  Ab <- cbind(A, b)  # rozšířená matice [A | b]
+
+  # PŘÍMÝ CHOD – vynulovat prvky pod diagonálou
+  for (p in 1:(N-1)) {
+    if (abs(Ab[p,p]) < .Machine$double.eps) stop("Nulový pivot – použij pivotaci.")
+    for (r in (p+1):N) {
+      m <- Ab[r, p] / Ab[p, p]
+      Ab[r, p:(N+1)] <- Ab[r, p:(N+1)] - m * Ab[p, p:(N+1)]
+    }
+  }
+
+  # ZPĚTNÝ CHOD
+  x <- numeric(N)
+  x[N] <- Ab[N, N+1] / Ab[N, N]
+  for (r in (N-1):1) {
+    x[r] <- (Ab[r, N+1] - sum(Ab[r, (r+1):N] * x[(r+1):N])) / Ab[r, r]
+  }
+  x
+}
+
+# 2) Gaussova eliminace s částečnou pivotací
+GaussEliminationPivoting <- function(A, b) {
+  N <- length(b)
+  Ab <- cbind(A, b)
+
+  # PŘÍMÝ CHOD s pivotací po sloupcích
+  for (p in 1:(N-1)) {
+    # najdi největší |pivot| ve sloupci p od řádku p dolů
+    imax <- which.max(abs(Ab[p:N, p])) + p - 1
+    if (abs(Ab[imax, p]) < .Machine$double.eps) stop("Singulární matice.")
+    if (imax != p) {
+      tmp <- Ab[p, ]
+      Ab[p, ] <- Ab[imax, ]
+      Ab[imax, ] <- tmp
+    }
+    for (r in (p+1):N) {
+      m <- Ab[r, p] / Ab[p, p]
+      Ab[r, p:(N+1)] <- Ab[r, p:(N+1)] - m * Ab[p, p:(N+1)]
+    }
+  }
+
+  # ZPĚTNÝ CHOD
+  x <- numeric(N)
+  x[N] <- Ab[N, N+1] / Ab[N, N]
+  for (r in (N-1):1) {
+    x[r] <- (Ab[r, N+1] - sum(Ab[r, (r+1):N] * x[(r+1):N])) / Ab[r, r]
+  }
+  x
+}
+
+# ====== SPOUŠTĚNÍ A KONTROLA ======
+cat("Bez pivotace:\n")
+print(GaussElimination(A, b))
+
+cat("\nS pivotací:\n")
+xp <- GaussEliminationPivoting(A, b)
+print(xp)
+
+cat("\nKontrola se solve():\n")
+print(solve(A, b))
+
+# Rezidua (měly by být ~0)
+cat("\n||Ax - b||2 (pivotace): ",
+    sqrt(sum((A %*% xp - b)^2)), "\n", sep = "")
+
+```
+
+## Metoda LU rozkladu
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [LU dekompozice](http://kfe.fjfi.cvut.cz/~vachal/edu/nme/cviceni/02_linalg/DOCS/teorie_LU_dekompozice.pdf),
+-   [Maticové rozklady](https://is.muni.cz/el/1431/podzim2011/M1VM01/um/rozklady.dokumentace.pdf) na straně 7.
+
+Video s postupem LU rozkladu:
+
+-   [Lineární algebra - LU rozklad](https://www.youtube.com/watch?v=JP2j8NY5jwE)
+::::
+
+LU rozklad (nebo také LU dekompozice) je metoda řešení soustavy lineárních rovnic. Tato metoda je postavena na následující definici:
+
+::: callout-note
+### Definice LU rozkladu
+
+Mějme regulární čtvercovou matici $A$ nad libovolným tělesem, u které není třeba při Gaussově eliminaci prohazovat řádky. Pak existují také regulární matice $L$ a $U$, jsou určený jednoznačně a platí pro ně následující tvrzení:
+
+-   $A = L \cdot U$
+-   $L$ je dolní trojúhelníková matice s jedničkami na celé hlavní diagonále
+-   $U$ je horní trojúhelníková matice s nenulovými prvky na hlavní diagonále.
+:::
+
+Z této definice plyne, že z našich čtvercových matic, s nimiž budeme pracovat, můžeme vytvořit součin dvou matic v trojúhelníkových tvarech.
+
+Tato metoda ovšem není vhodná vždy, k jejímu vytvoření potřebujeme zpracovat původní matici $A$, takže tento krok nemůžeme přeskočit. Je tedy vhodné ji využít v moment, kdy se nám bude měnit pouze vektor pravých stran $\vec{b}$.
+
+$$
+A =
+\begin{pmatrix}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1n} \\
+a_{21} & a_{22} & a_{23} & \cdots & a_{2n} \\
+a_{31} & a_{32} & a_{33} & \cdots & a_{3n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & a_{nn}
+\end{pmatrix} = 
+\begin{pmatrix}
+1 & 0 & 0 & \cdots & 0 \\
+l_{21} & 1 & 0 & \cdots & 0 \\
+l_{31} & l_{32} & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+l_{n1} & l_{n2} & l_{n3} & \cdots & 1
+\end{pmatrix}
+\begin{pmatrix}
+u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
+0 & u_{22} & u_{23} & \cdots & u_{2n} \\
+0 & 0 & u_{33} & \cdots & u_{3n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & u_{nn}
+\end{pmatrix} = LU
+$$
+
+Výpočet pomocí těchto pomocných matic pak probíhá díky substituci $A = LU$ $$A\vec{x}=\vec{b}$$
+$$(LU)\vec{x}=\vec{b}$$
+$$L(U\vec{x}) = \vec{b},$$ kde použijeme substituci $U\vec{x} = \vec{y}$. Dostaneme tak
+$$
+L\vec{y} = \vec{b}
+$$
+
+V čem je tedy výhodné řešit soustavu pomocí LU dekompozice? Výhodnost se skrývá ve složitosti výpočtu z trojúhelníkových matic, ta je řádově pouze $n^2$ (u řešení pomocí Gaussovy eliminační metody je složitost $n^3$). Tato výhoda plyne z faktu, že máme trojúhelníkové matice, na které je potřeba pouze aplikovat zpětný chod z Gaussovy eliminační metody.
+
+### Zjištění LU rozkladu při přímém chodu Gaussovy eliminační metody na příkladu {.unnumbered}
+
+Mějme matici
+$$
+A = 
+\begin{pmatrix}
+\begin{array}{ccc|c}
+2 & -3 & 11 & 43  \\
+7 & 2 & -8 & -5 \\
+-5 & 1 & 0 & -20
+\end{array}
+\end{pmatrix}
+$$
+
+nyní budeme postupovat v duchu přímého chodu Gaussovy eliminace, tedy zvolíme číslo 2 jako řídící prvek a budeme nulovat prvky pod ním. Zvolíme tedy vhodný násobek, abychom vynulovali číslo 7, to bude $k =\frac{7}{2} = 3,5$ a následně odečteme $k$-násobek prvního řádku od druhého řádku. A takto budeme postupovat dále, dokud nedosáhneme horního trojúhelníkového tvaru, budeme si pamatovat tato $k$, která nám následně matici $L$.
+
+$$
+\begin{pmatrix}
+2 & -3 & 11\\
+7 & 2 & -8\\
+-5 & 1 & 0
+\end{pmatrix} \sim
+\begin{pmatrix}
+2 & -3 & 11 &\\
+0 & 12,5 & -46,5\\
+-5 & 1 & 0
+\end{pmatrix} \sim \cdots \sim
+\begin{pmatrix}
+2 & -3 & 11\\
+0 & 12,5 & -46,5\\
+0 & 0 & 3,32
+\end{pmatrix}
+$$
+
+Nyní zavedeme matice $L$ a $U$. Matice $U$ bude matice $A$, kterou jsme takto upravili do horního trojúhelníkového tvaru.
+
+$$
+U = \begin{pmatrix}
+2 & -3 & 11\\
+0 & 12,5 & -46,5\\
+0 & 0 & 3,32
+\end{pmatrix}
+$$
+
+Matici $L$ vytvoříme pomocí oněch čísel $k$, která jsme používali k úpravám matice $A$.
+
+$$
+L =
+\begin{pmatrix}
+1 & 0 & 0  \\
+3,5 & 1 & 0 \\
+-2,5 & -0,52 & 1
+\end{pmatrix}
+$$
+
+Pokud bychom teď chtěli ověřit, že jsme LU rozklad provedli správně, vrátili bychom se k první rovnici $LU = A$.
+$$
+LU = \begin{pmatrix}
+1 & 0 & 0  \\
+3,5 & 1 & 0 \\
+-2,5 & -0,52 & 1
+\end{pmatrix}
+\begin{pmatrix}
+2 & -3 & 11\\
+0 & 12,5 & -46,5\\
+0 & 0 & 3,32
+\end{pmatrix} = 
+\begin{pmatrix}
+2 & -3 & 11\\
+7 & 2 & -8\\
+-5 & 1 & 0
+\end{pmatrix} = A
+$$
+
+### Metoda LU rozkladu v jazyce R {.unnumbered}
+
+```{r}
+# ================== VSTUPY ==================
+N <- 5
+A <- matrix(
+  c( 10, -2,  3, -1,  2,
+     -3,  9,  1,  7, -2,
+      2, -1, -7,  3,  8,
+      1,  7, -5, 10,  1,
+     -2,  3,  8, -4, 15),
+  nrow = 5, byrow = TRUE
+)
+b <- c(27, -61.5, -21.25, -41.1, 100.2)
+
+# ================== FUNKCE LU ROZKLAD ==================
+LUrozklad <- function(A) {
+  N <- dim(A)[1]
+  LU <- A
+  
+  # Přímý chod pro rozklad A = L·U
+  for (p in 1:(N-1)) {
+    for (r in (p+1):N) {
+      u <- LU[r, p] / LU[p, p]     # eliminační faktor
+      LU[r, (p+1):N] <- LU[r, (p+1):N] - u * LU[p, (p+1):N]
+      LU[r, p] <- u                # uložíme faktor do dolní části matice (L)
+    }
+  }
+  return(LU)
+}
+
+# ================== TEST A KONTROLA ==================
+LU <- LUrozklad(A)
+print("Rozšířená matice LU (L + U v jedné matici):")
+print(round(LU, 3))
+
+# Oddělení L a U pro přehled
+N <- nrow(LU)
+L <- diag(1, N)
+U <- matrix(0, N, N)
+for (i in 1:N) {
+  for (j in 1:N) {
+    if (i > j) L[i, j] <- LU[i, j]
+    else U[i, j] <- LU[i, j]
+  }
+}
+
+cat("\nMatice L:\n")
+print(round(L, 3))
+cat("\nMatice U:\n")
+print(round(U, 3))
+
+# Kontrola – rekonstrukce A ≈ L·U
+cat("\nKontrola L·U:\n")
+print(round(L %*% U, 3))
+cat("\nPůvodní A:\n")
+print(A)
+
+```
+
+## Jacobiho metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+- [Numerická matematika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/nmFelcman.pdf) na straně 37,
+- [Jacobiova metoda](https://math.fce.vutbr.cz/vyuka/matematika/numericke_metody/node12.html).
+::::
+
+Jacobiho metoda patří mezi iterační metody řešení soustav lineárních rovnic, tedy metody zpřesňující opakovaně svůj odhad. Jako u zbytku metod řešíme rovnici $A\vec{x} = \vec{b}$. Metoda konverguje tehdy, když je matice $A$ diagonálně dominantní nebo pozitivně definitní.
+
+Diagonálně dominantní je matice (o rozměru $n\times n$) právě tehdy, když platí
+$$
+\forall i \in \{1, 2, \cdots, n\};\;|a_{ii}| \geq \sum_{\substack{i = 1 \\ j \neq i}}^n |a_{ij}|.
+$$
+Pozitivní definitnost matice můžeme ověřit například pomocí Sylvestrova kritéria. To spočívá ve výpočtu determinantů všech hlavních vedoucích podmatic. Mějme matici
+$$
+A =
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}
+$$
+Matice $A$ je pozitivně definitní, pokud bude každý z následujících determinantů kladný.
+$$
+\det(a_{11}),\;
+\det \begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix},\; \cdots, \;
+\det \begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}.
+$$
+
+Mějme regulární čtvercovou matici $A$, pro kterou platí $A = L+D+U$, kde je $L$ ostře dolní trojúhelníková matice, $D$ diagonální matice a $U$ ostře horní trojúhelníková matice.
+
+$$
+A = 
+\begin{pmatrix}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1n} \\
+a_{21} & a_{22} & a_{23} & \cdots & a_{2n} \\
+a_{31} & a_{32} & a_{33} & \cdots & a_{3n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & a_{nn}
+\end{pmatrix},
+$$
+$$
+L = 
+\begin{pmatrix}
+0 & 0 & 0 & \cdots & 0 \\
+a_{21} & 0 & 0 & \cdots & 0 \\
+a_{31} & a_{32} & 0 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & 0
+\end{pmatrix},
+D = 
+\begin{pmatrix}
+a_{11} & 0 & 0 & \cdots & 0 \\
+0 & a_{22} & 0 & \cdots & 0 \\
+0 & 0 & a_{33} & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & a_{nn}
+\end{pmatrix},
+U =
+\begin{pmatrix}
+0 & a_{12} & a_{13} & \cdots & a_{1n} \\
+0 & 0 & a_{23} & \cdots & a_{2n} \\
+0 & 0 & 0 & \cdots & a_{3n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & 0
+\end{pmatrix}.
+$$
+
+Nyní můžeme soustavu rovnic vyjádřit jako
+$$
+A\vec{x} =(L+D+U)\vec{x} = \vec{b}
+$$
+Pomocí následujících úprav si vyjádříme vektor řešení $\vec{x}$.
+$$
+D\vec{x} = \vec{b} - (L+U)\vec{x}
+$$
+$$
+\vec{x} = D^{-1} [\vec{b} - (L+U)\vec{x}]
+$$
+Takto jsme si vyjádřili nový odhad pomocí starého, můžeme přeznačit
+$$
+\vec{x^{(k+1)}} = D^{-1} [\vec{b} - (L+U)\vec{x^{(k)}}]
+$$
+
+Rozepišme tento zápis.
+$$
+\begin{pmatrix}
+x_1^{(k+1)} \\
+x_2^{(k+1)} \\
+\vdots \\
+x_n^{(k+1)}
+\end{pmatrix} = 
+\begin{pmatrix}
+\frac{1}{a_{11}} & 0 & \cdots & 0 \\
+0 & \frac{1}{a_{22}} & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \frac{1}{a_{nn}}
+\end{pmatrix} \left[
+\begin{pmatrix}
+b_1 \\
+b_2 \\
+\vdots \\
+b_n
+\end{pmatrix} -
+\begin{pmatrix}
+0 & a_{12} & a_{13} & \cdots & a_{1n} \\
+a_{21} & 0 & a_{23} & \cdots & a_{2n} \\
+a_{31} & a_{32} & 0 & \cdots & a_{3n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & 0
+\end{pmatrix}
+\begin{pmatrix}
+x_1^{(k)} \\
+x_2^{(k)} \\
+\vdots \\
+x_n^{(k)}
+\end{pmatrix}
+\right]
+$$
+Nyní toto zapíšeme pro jednu složku.
+$$
+x_i^{(k+1)} = \frac{1}{a_{ii}} \left[b_1 - \sum_{\substack{j = 1\\ j \neq i}}^n a_{ij}x_j^{(k)} \right]
+$$
+A následně můžeme zapsat celou soustavu jako
+
+$$
+\begin{align*}
+x_1^{(k+1)} &= \frac{b_1 - a_{12}x_2^{(k)} - a_{13}x_3^{(k)} - \cdots - a_{1(n-1)}x_{(n-1)}^{(k)} - a_{1n}x_n^{(k)}}{a_{11}}\\
+x_2^{(k+1)} &= \frac{b_2 - a_{21}x_1^{(k)} - a_{23}x_3^{(k)} - \cdots - a_{2(n-1)}x_{(n-1)}^{(k)} - a_{2n}x_n^{(k)}}{a_{22}}\\
+&\vdots\\
+x_n^{(k+1)} &= \frac{b_n - a_{n1}x_1^{(k)} - a_{n2}x_2^{(k)} - \cdots - a_{n(n-1)}x_{(n-1)}^{(k)}}{a_{nn}}.\end{align*}
+$$
+
+### Jacobiho metoda v jazyce R {.unnumbered}
+
+```{r}
+# ================== VSTUPY (5×5) ==================
+A <- matrix(
+  c( 10, -2,  3, -1,  2,
+     -3,  9,  1,  7, -2,
+      2, -1, -7,  3,  8,
+      1,  7, -5, 10,  1,
+     -2,  3,  8, -4, 15),
+  nrow = 5, byrow = TRUE
+)
+b <- c(27, -61.5, -21.25, -41.1, 100.2)
+
+# ================== Jacobi — skalárně ==================
+Jacobi <- function(A, b, maxiter = 10000, eps = 1e-10){
+  N <- length(b)
+  xold <- xnew <- rep(0, N)
+  d <- diag(A)
+  if (any(abs(d) < .Machine$double.eps)) stop("Nulový prvek na diagonále.")
+
+  for(iter in 1:maxiter){
+    for(i in 1:N){
+      s <- b[i] - sum(A[i, -i] * xold[-i])
+      xnew[i] <- s / d[i]
+    }
+    err <- sqrt(sum((xnew - xold)^2))
+    if (!is.finite(err)) return(NA)
+    if (err < eps){
+      cat("Number of iterations (Jacobi):", iter, "\n")
+      return(xnew)
+    }
+    xold <- xnew
+  }
+  warning("Nedosáhla se konvergence v zadaném počtu iterací.")
+  xnew
+}
+
+# ================== Jacobi — maticově (bez mutace A) ==================
+JacobiVer2 <- function(A, b, maxiter = 10000, eps = 1e-10){
+  N <- length(b)
+  D <- diag(diag(A))         # diagonální část
+  R <- A - D                 # zbytek (A bez diagonály)
+  d <- diag(D)
+  if (any(abs(d) < .Machine$double.eps)) stop("Nulový prvek na diagonále.")
+
+  # Předpočítáme D^{-1}
+  Dinv <- diag(1 / d)
+  xold <- xnew <- rep(0, N)
+
+  for(iter in 1:maxiter){
+    # x^{k+1} = D^{-1} (b - R x^k)
+    xnew <- Dinv %*% (b - R %*% xold)
+    err <- sqrt(sum((xnew - xold)^2))
+    if (!is.finite(err)) return(NA)
+    if (err < eps){
+      cat("Number of iterations (JacobiVer2):", iter, "\n")
+      return(drop(xnew))
+    }
+    xold <- xnew
+  }
+  warning("Nedosáhla se konvergence v zadaném počtu iterací.")
+  drop(xnew)
+}
+
+# ================== SPUŠTĚNÍ A KONTROLA ==================
+tb <- Sys.time(); x1 <- Jacobi(A, b); te <- Sys.time()
+cat("Trvání Jacobi: ", as.numeric(te - tb), " s\n", sep = "")
+print(x1)
+
+tb <- Sys.time(); x2 <- JacobiVer2(A, b); te <- Sys.time()
+cat("Trvání JacobiVer2: ", as.numeric(te - tb), " s\n", sep = "")
+print(x2)
+
+cat("\nKontrola se solve():\n")
+x_true <- solve(A, b); print(x_true)
+
+cat("\n||Ax - b||2 (Jacobi):     ", sqrt(sum((A %*% x1 - b)^2)), "\n", sep = "")
+cat("||Ax - b||2 (JacobiVer2): ", sqrt(sum((A %*% x2 - b)^2)), "\n", sep = "")
+
+```
+
+## Gaussova-Seidelova metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+- [Numerická matematika](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/nmFelcman.pdf) na stranách 37-39,
+- [Gaussova-Seidelova metoda](https://math.fce.vutbr.cz/vyuka/matematika/numericke_metody/node13.html).
+
+Video s ukázkou výpočtu naleznete zde:
+- [The Gauss-Seidel Method](https://www.youtube.com/watch?v=F6J3ZmXkMj0).
+::::
+
+Gaussova-Seidelova metoda je také metodou iterační a vychází ze stejné úvahy spočívající v rozdělení matice $A$ na tři matice (ostře dolní trojúhelníkovou, diagonální a ostře horní trojúhelníkovou), tedy
+$$
+A\vec{x} = (L+D+U)\vec{x} = \vec{b}.
+$$
+Úprava ovšem probíhá jinak, nejdříve upravíme do tvaru
+$$
+(L+D)\vec{x} = \vec{b} - U\vec{x}.
+$$
+Nicméně nyní bychom museli k osamocení vektoru $\vec{x}$ vynásobit rovnici inverzní maticí k matici $L+U$ a dostali bychom
+$$
+\vec{x} = (L+D)^{-1} \left[ \vec{b} - U\vec{x}\right],
+$$
+ale hledání inverzní matice k takové matici by mělo příliš velikou složitost, takže zvolíme úpravu
+$$
+L\vec{x^{(k+1)}} + D\vec{x^{(k+1)}} = \vec{b} - U\vec{x^k}.
+$$
+$$
+D\vec{x^{(k+1)}} = \vec{b} - U\vec{x^k} - L\vec{x^{(k+1)}}
+$$
+$$
+\vec{x^{(k+1)}} = D^{-1} \left[\vec{b} - (L\vec{x^{(k+1)}} + U\vec{x^k}) \right]
+$$
+
+Pro pochopení rozdílu si opět tento vzorec přepišme do tvaru
+$$
+\begin{align*}
+&\begin{pmatrix}
+x_1^{(k+1)} \\
+x_2^{(k+1)} \\
+\vdots \\
+x_n^{(k+1)}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\frac{1}{a_{11}} & 0 & \cdots & 0 \\
+0 & \frac{1}{a_{22}} & \cdots & 0 \\
+\vdots & \vdots& \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \frac{1}{a_{nn}}
+\end{pmatrix}
+\left[
+\begin{pmatrix}
+b_1 \\ b_2 \\ \vdots \\ b_n
+\end{pmatrix}
+-
+\begin{pmatrix}
+0 & 0 & 0& \cdots & 0 \\
+a_{21} & 0&0 & \cdots & 0 \\
+a_{31} & a_{32} & 0 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} &a_{n3} & \cdots & 0
+\end{pmatrix}
+\begin{pmatrix}
+x_1^{(k+1)} \\ x_2^{(k+1)} \\ \vdots \\ x_n^{(k+1)}
+\end{pmatrix} \right. \\
+& \hspace{2cm}
+\left. +
+\begin{pmatrix}
+0 & a_{12} & a_{13} & \cdots & a_{1n}\\
+0 & 0 & a_{23} & \cdots & a_{2n}\\
+0 & 0 & 0 & \cdots & a_{3n}\\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & a_{nn}
+\end{pmatrix}
+\begin{pmatrix}
+x_1^{(k)} \\
+x_2^{(k)} \\
+\vdots \\
+x_n^{(k)}
+\end{pmatrix}
+\right]
+\end{align*}
+$$
+Hlavní výhodou, kterou vidíme v tomto zápise, je jednodušší výpočet. Trojúhelníkové matice se totiž násobí lépe.
+
+### Gaussova-Seidelova metoda v jazyce R {.unnumbered}
+```{r}
+# ============== VSTUPY (5×5) ==============
+A <- matrix(
+  c( 10, -2,  3, -1,  2,
+     -3,  9,  1,  7, -2,
+      2, -1, -7,  3,  8,
+      1,  7, -5, 10,  1,
+     -2,  3,  8, -4, 15),
+  nrow = 5, byrow = TRUE
+)
+b <- c(27, -61.5, -21.25, -41.1, 100.2)
+
+# ============== Gauss–Seidel (klasická implementace) ==============
+GS <- function(A, b, maxiter = 10000, eps = 1e-10){
+  N <- length(b)
+  xold <- x <- rep(0, N)
+  d <- diag(A)
+  if (any(abs(d) < .Machine$double.eps)) stop("Nulový prvek na diagonále.")
+
+  for (iter in 1:maxiter){
+    for (i in 1:N){
+      # součet s aktuálně nejnovějšími hodnotami x (Gauss–Seidel update in-place)
+      s <- b[i] - sum(A[i, -i] * x[-i])
+      x[i] <- s / d[i]
+    }
+    err <- sqrt(sum((x - xold)^2))
+    if (!is.finite(err)) return(NA)
+    if (err < eps){
+      cat("Number of iterations (Gauss-Seidel):", iter, "\n")
+      return(x)
+    }
+    xold <- x
+  }
+  warning("Nedosáhla se konvergence v zadaném počtu iterací.")
+  x
+}
+
+# ============== Gauss–Seidel (kompaktní varianta) ==============
+# x^{k+1} = (D + L)^{-1} (b - U x^{k}), kde A = D + L + U
+GS_variant <- function(A, b, maxiter = 10000, eps = 1e-10){
+  N <- length(b)
+  D <- diag(diag(A))
+  L <- A - D
+  U <- matrix(0, N, N); U[upper.tri(A)] <- A[upper.tri(A)]  # horní část
+  L <- L - U                                               # dolní část (striktně pod diag)
+  if (any(abs(diag(D)) < .Machine$double.eps)) stop("Nulový prvek na diagonále.")
+
+  M <- D + L                        # (D+L)
+  Minv <- solve(M)                  # můžeme i LU rozklad, ale solve je pro N=5 OK
+  xold <- x <- rep(0, N)
+
+  for (iter in 1:maxiter){
+    x <- Minv %*% (b - U %*% x)     # jeden GS krok maticově
+    err <- sqrt(sum((x - xold)^2))
+    if (!is.finite(err)) return(NA)
+    if (err < eps){
+      cat("Number of iterations (GS_variant):", iter, "\n")
+      return(drop(x))
+    }
+    xold <- x
+  }
+  warning("Nedosáhla se konvergence v zadaném počtu iterací.")
+  drop(x)
+}
+
+# ============== SPUŠTĚNÍ A KONTROLA ==============
+x_gs <- GS(A, b)
+x_gsv <- GS_variant(A, b)
+x_true <- solve(A, b)
+
+cat("\nŘešení (Gauss–Seidel):\n"); print(x_gs)
+cat("\nŘešení (GS_variant):\n"); print(x_gsv)
+cat("\nŘešení (solve):\n"); print(x_true)
+
+cat(sprintf("\n||Ax - b||2  (GS)        = %.6e\n", sqrt(sum((A %*% x_gs  - b)^2))))
+cat(sprintf("||Ax - b||2  (GS_variant)= %.6e\n", sqrt(sum((A %*% x_gsv - b)^2))))
+
+```
+
+## Rozdíl mezi Jacobiho a Gaussovou-Seidelovou metodou
+Obě metody vychází ze stejné počáteční úpravy pomocí dvou ostře trojúhelníkových a diagonální matice. A ačkoli je v úpravě do finální podoby u obou metod pouze jedna odlišnost, je pro výpočetní rychlost důležitá.
+
+Gaussova-Seidelova metoda je právě kvůli tomuto jednomu rozdílu rychlejší. To souvisí s použitím trojúhelníkových matic místo jejich součtu. Součet těchto mětic je totiž náročnější na násobení než postupné násobení jedné a následně druhé matice vektorem.
+
+Dalším rozdílem je potřebná paměť pro vykonání těchto metod.Při použití Jacobiho metody je potřeba si zapamatovat celý vektor $x^{(k)}$ pro výpočet nové iterace $x^{(k+1)}$. Oproti tomu u Gaussovy-Seidelovy metody potřebujeme rezervovat místo pouze pro jeden vektor $x^{(k)}$, na jehož místo se postupně ukládají složky vektoru $x^{(k+1)}$. Často si ovšem budeme chtít zapamatovat i celý předchozí vektor, kvůli kontrole přesnosti aktuální iterace. 
+
+# Interpolace
+S funkcemi se potýkáme již od základní školy. Některé jsou zadané předpisem, jiné grafem. Je ale také možné, že je nám funkce zadána pomocí tabulky hodnot, tedy několika bodů. Cílem interpolace je tedy vytvořit křivku, která bude zadanými body procházet a bude co nejhladší.
+
+V praxi můžeme interpolaci využít, budeme-li mít omezený počet naměřených hodnot a budeme chtít předvídat vývoj dalších měření nebo vývoj mezi naměřenými hodnotami. Pochopitelné je, že čím více budeme mít naměřených hodnot, tím přesnější bude křivka, kterou je proložíme.
+
+## Volba bodů k interpolaci
+Zvolme si tyto body, které se v následujících metodách budeme snažit proložit křivkou.
+
+```{r}
+#| echo: false
+x <- c(1,2,3,4,5)
+y <- c(2,3,5,4,2)
+plot(x,y, col="blue", xlim = c(0,6), ylim = c(0, 6), pch=16, xlab="", ylab="")
+```
+
+## Lineární interpolace po částech
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [Numerické recepty](https://geo.mff.cuni.cz/~lh/nofy056/prednaska/02-NR.pdf) na straně 5.
+
+Videa s vizualizací a dalším vysvětlením metody najdete zde:
+
+- [Lineární interpolace](https://www.youtube.com/watch?v=mZuqOYjxymU&t=180s),
+- [Matematika za lineární interpolací](https://cs.khanacademy.org/computing/pixar/animate/parametric-curves/v/animation-5).
+::::
+
+Lineární interpolace po částech je nejjednodušším proložením bodů křivkou. Body totiž proložíme lomenou křivkou, stačí tedy spojit nejbližší dva body úsečkou. Ale pozor musí si být nejbližší svými souřadnicemi na ose $x$, nikoli vzdáleností bodů. Jinak by se totiž mohlo stát, že se budeme vracet zpět a neproložíme tak body funkcí (v jednom bodě bude mít dvě různé funkční hodnoty).
+
+
+### Lineární interpolace po částech v jazyce R {.unnumbered}
+```{r}
+# Zde bude kód
+```
+
+## Interpolace polynomem v Lagrangeově tvaru
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [Interpolace](https://kma.fp.tul.cz/images/stories/vyuka/cerna-matematika3-fs/interpolace.pdf) na stranách 3-7,
+-   [Aproximace funkcí](http://kfe.fjfi.cvut.cz/~klimo/nm/l6.pdf) na stranách 1-3.
+::::
+
+Mějme výchozí situaci, na níž si vysvětlíme interpolaci polynomem v Lagrangově tvaru.
+
+:::::: columns
+::: {.column width="45%"}
+![Výchozí situace pro interpolaci](lagrange.jpg){fig-cap="Obrázek 7"}
+:::
+
+::: {.column width="13%"}
+:::
+
+::: {.column width="42%"}
+![Nové body k interpolaci](lagrange_new.jpg){fig-cap="Obrázek 8"}
+:::
+::::::
+
+Potřebujeme proložit body $A,B,C,D$ polynomem. Víme, že $n$ bodů proložíme polynomem stupně $n-1$.
+
+Tento způsob interpolace vychází z předpokladu, že naprosto bezpečně umíme proložit polynomem stupně $n-1$ body $x_0, x_1, x_2$, které leží na ose $x$. Takový polynom bude vypadat takto $$(x-x_0)(x-x_1)(x-x_2).$$ Nyní potřebujeme tento polynom upravit tak, abychom zachovali jeho stupeň a zároveň procházel bode $D$. Pro jednoduchost si označíme $D[x_3, y_3]$. Řešíme tedy podmínku $$p(x_3) = y_3,$$ kde $p(x)$ je hledaný polynom. Dosadíme-li do našeho polynomu hodnotu $x_3$, dostaneme $$(x_3-x_0)(x_3-x_1)(x_3-x_2).$$ Můžeme nyní podělit náš původní polynom tímto výrazem (který je ale pouze číslo, není tu žádná neznámá). $$\frac{(x-x_0)(x-x_1)(x-x_2)}{(x_3-x_0)(x_3-x_1)(x_3-x_2)}$$ Tento polynom, který je stále stupně $n-1$, má ve všech našich budech hodnotu 0, tedy kromě bodu $x_3$, kde má hodnotu 1. Tento polynom už stačí pouze dovést k cíli vynásobením hodnotou $y_3$. Máme tak polynom $$p(x) = y_3 \frac{(x-x_0)(x-x_1)(x-x_2)}{(x_3-x_0)(x_3-x_1)(x_3-x_2)}.$$ Tento polynom zcela jistě splňuje podmínku $$p(x_3) = y_3.$$
+
+Tento postup bychom mohli zopakovat pro každý bod, tedy vymyslet tímto způsobem polynom, který bude procházet jedním bodem a v ostatních bodech budou procházet osou $x$.
+
+Tento postup lze vyjádřit i jedním vzorcem, a to $$\sum_{i=0}^n y_i \prod_{\substack{m=0 \\ m\neq i}}^n \frac{x-x_m}{x_i-x_m}.$$
+
+Všimněme si, že produkt nám nahrazuje zlomek a nesmí se v něm probíhající index rovnat indexu předchozí sumy, jelikož by se nám ve jmenovateli objevila 0. Suma nám tak dá kombinace polynomů pro každý bod. Důležité je, že tento výraz generuje i kombinace podílu s jinou hodnotou $y_i$, což není ku škodě, neboť každý takový součin má hodnotu rovnou 0.
+
+### Lagrangeův interpolační polynom v jazyce R {.unnumbered}
+```{r}
+# Vstupy 
+# libovolně si uprav m a data x, y
+m <- 10
+x <- 1:m
+y <- runif(m, -1, 1)
+
+# Funkce
+Lagrange<-function(t,x,y){
+  n<-length(x)
+  soucet<-0
+  for(i in 1:n){
+    soucin<-1
+    for(j in 1:n){
+      if(j!=i) soucin<-soucin*(t-x[j])/(x[i]-x[j])
+    }
+    soucet<-soucet+y[i]*soucin
+  }
+  return(soucet)
+}
+
+# Test funkčnosti
+cat("=== TEST: P(x_k) ≈ y_k ===\n")
+for(k in 1:m){
+  pk <- Lagrange(x[k], x, y)
+  cat(sprintf("k=%2d, x=%.3f, P(x)=%.6f, y=%.6f, chyba=%.2e\n",
+              k, x[k], pk, y[k], abs(pk - y[k])))
+}
+```
+
+## Interpolace polynomem v Newtonově tvaru
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [Numerické recepty](https://geo.mff.cuni.cz/~lh/nofy056/prednaska/02-NR.pdf) na straně 4,
+- [Numerické metody I](https://mi21.vsb.cz/sites/mi21.vsb.cz/files/unit/numericke_metody.pdf) na straně 114-115.
+
+Interaktivní vizualizace metody:
+
+- [Newtonova interpolace](https://www.geogebra.org/m/rn2fyjeh).
+::::
+
+Interpolační polynom v Lagrangeově tvaru má značnou nevýhodu, chceme-li totiž přidat další bod, který by interpolaci zpřesnil, musíme celý polynom přepočítat. Zároveň je tento výpočet dost náročný. Proto je výhodné hledat jiný interpolační polynom.
+
+Takovým vhodným tvarem je polynom, který nazýváme Newtonovým interpolačním polynomem.
+$$
+N(x) = a_0+a_1(x-x_0)+a_2(x-x_0)(x-x_1) + \cdots + a_n(x-x_0)(x-x_1)\cdots (x-x_{n-1})
+$$
+$N(x)$ je vlastně označením funkce, která proloží dané body $X_0, X_1, \cdots, X_n$ a můžeme tento zápis rozepsat do soustavy rovnic tak, že dosadíme body $X_i[x_i,y_i]$, přičemž v $i$-té rovnici zůstane na pravé straně $i+1$ nevynulovaných členů.
+
+$$
+\begin{aligned}
+y_0 &= a_0\\
+y_1 &= a_0 + a_1(x-x_0)\\
+y_2 &= a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1)\\
+&\vdots\\
+y_n &= a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1) + \cdots + a_n(x-x_0)(x-x_1)\cdots(x-x_{n-1})
+\end{aligned}
+$$
+Z tohoto vyjádření pak stačí shora postupně dosazovat vypočtené koeficienty $a_0, a_1, \cdots$ do rovnic níže a dopočítávat další koeficienty. Tímto způsobem je pak možné jednoduše dopočítat další, později přidaný, bod, jelikož předchozí koeficienty známe a nemusíme je přepočítávat.
+
+Pro výpočet koeficientů $a_i$ pak používáme jeho vyjádření z rovnice
+$$
+a_n = \frac{a_0 + \sum_{i=1}^n a_i \prod_{j=0}^{i-1} (x_n-x_j)}{\prod_{j=0}^{n-1}(x_n-x_j)}.
+$$
+
+### Newtonův interpolační polynom v jazyce R {.unnumbered}
+```{r}
+x <- c(1,2,3,4,5)
+y <- c(2,3,5,4,2)
+
+# vykreslení bodů
+plot(x, y, col="blue", xlim=c(0,6), ylim=c(0,6), pch=16, xlab="x", ylab="y")
+
+# popisky souřadnic ke každému bodu
+text(x, y + 0.25, labels = paste0("(", x, ",", y, ")"), col="blue", cex=0.8)
+
+# Newtonův interpolační polynom
+NewtonPolynomialAdd <- function(x, y, a, i){
+  if(i==1) return(y[i]) 
+  if(i==2) return((y[2]-y[1])/(x[2]-x[1]))
+  nasobitko <- 1
+  suma <- 0
+  for(j in 1:(i-1)){
+    suma <- suma + a[j]*nasobitko
+    nasobitko <- nasobitko*(x[i]-x[j])
+  }
+  return((y[i] - suma)/nasobitko)
+}
+
+# výpočet všech koeficientů
+a <- numeric(length(x))
+for(i in 1:length(x)){
+  a[i] <- NewtonPolynomialAdd(x, y, a, i)
+}
+
+print(a)
+```
+
+# Aproximace metodou nejmenších čtverců
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/Numerika.pdf) na stranách 69-,
+- [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/numerickemetody.pdf) na stranách 124-,
+- [Numerické metody](https://physics.ujep.cz/~jskvor/NME/DalsiSkripta/FINALNI_VERZE_CD.pdf) na stranách 108-.
+::::
+
+# Numerické derivování a integrace
+
+## Newtonovy-Cotesovy vzorce
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [DOPLNIT]().
+::::
+
+## Rombergova kvadratura
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [DOPLNIT]().
+::::
+
+# Numerické řešení obyčejných diferenciálních rovnic
+
+## Eulerova metoda
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [DOPLNIT]().
+::::
+
+## Metody Rungeho-Kutty
+
+:::: {.callout .callout-style-default .callout-tip .callout-titled style="border-left-color: #8B4513"}
+::: {.callout-body-container .callout-body}
+<img src="book.png" width="20px"/></img><b>[Zdroj</b>]{style="padding-left: 10px; font-size: 15px; padding-top: 20px"}
+:::
+
+V následujících materiálech naleznete další možná vysvětlení této metody:
+
+-   [DOPLNIT]().
+::::
